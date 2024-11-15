@@ -69,9 +69,10 @@ class DataStructureTools
     }
 
     // Generic function check if any STL container is sorted (vector, list, deque, array, etc.)
-    bool isSorted(const std::vector<int> &vec, bool ascending = true)
+    template <typename Container>
+    bool isSorted(const Container &container, bool ascending = true)
     {
-        return is_sorted(vec.begin(), vec.end(), [ascending](int a, int b) {
+        return is_sorted(container.begin(), container.end(), [ascending](int a, int b) {
             return ascending ? a <= b : a >= b;
         });
     }
