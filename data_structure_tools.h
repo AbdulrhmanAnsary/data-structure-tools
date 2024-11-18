@@ -11,32 +11,49 @@
 class DataStructureTools
 {
   public:
-    // For C-style arrays
-    template <typename T>
-    void print(const T container[], int size)
-    {
-        std::cout << "{";
-        for (int i = 0; i < size; i++)
-        {
-            std::cout << container[i];
-            if (i < size - 1)
-                std::cout << ", ";
-        }
-        std::cout << "}\n";
-    }
-
-    // Generic function to print any STL container (vector, list, deque, array, etc.)
     template <typename Container>
-    void print(const Container &container)
+    void printContainer(Container &container)
     {
-        std::cout << "{";
-        for (auto item = container.begin(); item != container.end(); ++item)
+        if constexpr (std::is_arithmetic_v<Container>)
         {
-            std::cout << *item;
-            if (std::next(item) != container.end())
-                std::cout << ", ";
+            // Print basic types (e.g., int, float)
+            std::cout << container;
         }
-        std::cout << "}\n";
+        else if constexpr (std::is_same_v<Container, std::string>)
+        {
+            // Print std::string directly
+            std::cout << container;
+        }
+        else if constexpr (std::is_array_v<Container>)
+        {
+            // Print raw arrays
+            std::cout << "{";
+            size_t size = std::extent_v<Container>;
+            for (size_t i = 0; i < size; i++)
+            {
+                printContainer(container[i]);
+                if (i < size - 1)
+                    std::cout << ", ";
+            }
+            std::cout << "}";
+        }
+        else if constexpr (std::is_class_v<Container> && std::is_same_v<decltype(container.begin()), decltype(container.end())>)
+        {
+            // Print containers (e.g., std::vector)
+            std::cout << "{";
+            for (auto item = container.begin(); item != container.end(); ++item)
+            {
+                printContainer(*item);
+                if (next(item) != container.end())
+                    std::cout << ", ";
+            }
+            std::cout << "}";
+        }
+        else
+        {
+            // Fallback for unsupported types
+            std::cout << "[Unsupported type]";
+        }
     }
 
     // Randomly insert elements into a C-style array
