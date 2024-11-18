@@ -35,7 +35,7 @@ int main() {
     
     std::vector<int> numbers;
     tools.randomFill(numbers, 10);
-    tools.print(numbers);
+    tools.printContainer(numbers);
     
     bool is_sorted = tools.isSorted(numbers);
     std::cout << "Is sorted: " << (is_sorted ? "Yes" : "No") << std::endl;
